@@ -50,10 +50,17 @@ async function deleteRow(id) {
   return query(q, id);
 }
 
+async function findByUsername(username) {
+  const q = 'SELECT * FROM users WHERE username = $1';
+
+  return query(q, username);
+}
+
 module.exports = {
   query,
   insert,
   select,
   update,
   deleteRow, // delete er frátekið orð
+  findByUsername, // skila fallinu svo hægt sé að nota það
 };
