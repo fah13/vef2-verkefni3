@@ -1,0 +1,29 @@
+<%- include('header') -%>
+
+<h1>Nýskráning</h1>
+
+<form method="post" action="/">
+  <div class="field<%= locals.isInvalid('name', errors) ?  ' field--invalid' : '' %>">
+    <label for="name">Nafn</label>
+    <input type="text" name="name" id="name" value="<%= name %>" class="">
+  </div>
+  <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
+    <label for="email">Netfang</label>
+    <input type="text" name="email" id="email" value="<%= email %>" class="">
+  </div>
+  <div class="field<%= locals.isInvalid('name', errors) ?  ' field--invalid' : '' %>">
+    <label for="username">Notendanafn</label>
+    <input type="text" name="user" id="username" value="<%= username %>" class="">
+  </div>
+  <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
+    <label for="password">Lykilorð</label>
+    <input type="password" name="password" id="password" value="<%= password %>" class="">
+  </div>
+  <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
+    <label for="password">Lykilorð aftur</label>
+    <input type="password" name="password" id="password" value="<%= password %>" class="">
+  </div>
+  <button>Skrá notenda</button>
+</form>
+
+<%- include('footer') -%>
