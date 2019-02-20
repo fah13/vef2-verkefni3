@@ -16,13 +16,23 @@
     <input type="text" name="user" id="username" value="<%= username %>" class="">
   </div>
   <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
-    <label for="password">Lykilorð</label>
-    <input type="password" name="password" id="password" value="<%= password %>" class="">
+    <label for="password1">Lykilorð</label>
+    <input type="password" name="password1" id="password1" value="<%= password %>" class="">
   </div>
   <div class="field<%= locals.isInvalid('email', errors) ?  ' field--invalid' : '' %>">
-    <label for="password">Lykilorð aftur</label>
-    <input type="password" name="password" id="password" value="<%= password %>" class="">
+    <label for="password2">Lykilorð aftur</label>
+    <input type="password" name="password2" id="password2" value="<%= password %>" class="">
   </div>
+
+  <% if (errors.length > 0) { %>
+    <h2>Vandræði við að senda umsókn:</h2>
+    <ul class="errors">
+      <% errors.forEach((error) => { %>
+        <li class="error"><label for="<%= error.param %>"><%= error.msg %></label></li>
+      <% }); %>
+    </ul>
+  <% } %>
+  
   <button>Skrá notenda</button>
 </form>
 
