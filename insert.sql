@@ -29,6 +29,6 @@ VALUES
 ('admin', '$2y$12$FqyxdymTUeA1YmOiwcFyrem3NkC166M6VYUhRdhGJEbWaKyOQyvHW', 'Admin', 'admin@example.org', true);
 
 INSERT INTO users
-(username, password, name, email)
+(username, password, name, email, admin)
 VALUES
 ('nn', '$2y$12$qSaQXR7AcajULPj1.9u6teq/kBD.Ierd63iAP4SPcIw2mx3yyKxhW', 'Nafnlaus', 'nn@example.org', false);
