@@ -20,6 +20,8 @@ const {
   SESSION_SECRET: sessionSecret,
 } = process.env;
 
+console.info(process.env);
+
 if (!sessionSecret) {
   console.error('Add SESSION_SECRET to .env');
   process.exit(1);

@@ -21,4 +21,5 @@ function isInvalid(field, errors) {
 
 module.exports = {
   catchErrors,
+  isInvalid,
 };
