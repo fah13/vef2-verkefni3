@@ -11,6 +11,7 @@ const login = require('./login');
 const register = require('./register');
 const admin = require('./admin');
 const applications = require('./applications');
+const { isInvalid } = require('./utils');
 
 const sessionSecret = process.env.SESSION_SECRET;
 
@@ -25,6 +26,13 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
+app.use(session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  maxAge: 20 * 1000, // 20 sek
+}));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -37,9 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  * @param {array} errors Fylki af villum frá express-validator pakkanum
  * @returns {boolean} `true` ef `field` er í `errors`, `false` annars
  */
-function isInvalid(field, errors) {
-  return Boolean(errors.find(i => i.param === field));
-}
+
 
 app.locals.isInvalid = isInvalid;
 
