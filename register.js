@@ -1,68 +1,169 @@
+
 const express = require('express');
 const xss = require('xss');
-const {
-  check,
-  validationResults,
+const { 
+  check, 
+  validationResult,
 } = require('express-validator/check');
 const { sanitize } = require('express-validator/filter');
-const { createApplication } = require('./db');
-const { catchErrors } = require('./utils');
-const users = require('./users');
+const { hashPassword } = require('./users');
 
-
-const router = express.Router;
-
-router.use(express.urlencoded({
-  extended: true,
-}));
-
-function sanitizeUser(data) {
-  const safeData = data;
-
-  safeData.username = xss(data.username);
-  safeData.email = xss(data.email);
-  safeData.name = xss(data.name);
-  safeData.password1 = '';
-  safeData.password2 = '';
-
-  return safeData;
+/**
+ * Higher-order fall sem umlykur async middleware með villumeðhöndlun.
+ *
+ * @param {function} fn Middleware sem grípa á villur fyrir
+ * @returns {function} Middleware með villumeðhöndlun
+ */
+function catchErrors(fn) {
+  return (req, res, next) => fn(req, res, next).catch(next);
 }
 
-async function validData(data, req) {
-  const errors = validationResults(req);
+const router = express.Router();
 
-  let pwNoMatch = false;
-  if (data.password1 !== data.password2) pwNoMatch = true;
+// Fylki af öllum validations fyrir umsókn
+const validations = [
+  check('name')
+    .isLength({ min: 1 })
+    .withMessage('Nafn má ekki vera tómt'),
 
-  const userTaken = await users.db.getIfUsernameTaken(data.username);
-  const emailTaken = await users.db.getIfEmailTaken(data.email);
+  check('email')
+    .isLength({ min: 1 })
+    .withMessage('Netfang má ekki vera tómt'),
 
-  if (!errors.isEmpty() || pwNoMatch || userTaken || emailTaken) {
-    const err = {};
-    err.msgList = errors.array().map(i => i.msg);
-    for (let j = 0; j < errors.array().length; j += 1) {
-      err[errors.array()[j].param] = true;
+  check('email')
+    .isEmail()
+    .withMessage('Netfang verður að vera netfang'),
+
+  check('username')
+    .isLength({ min: 1 })
+    .withMessage('Notandanafn verður að vera minnst einn stafur'),
+
+  check('password')
+    .isLength({ min: 8 })
+    .withMessage('Lykilorð verður að vera minnst 8 stafir'),
+
+  check('password2')
+    .custom((val, { req }) => val === req.body.password)
+    .withMessage('Lykilorð verða að vera eins'),
+
+
+];
+
+function sanitizeXss(fieldName) {
+  return (req, res, next) => {
+    if (!req.body) {
+      next();
     }
 
-    if (pwNoMatch) {
-      err.msgList.push('Lykilorð verða að vera eins.')
-      err.password1 = true;
+    const field = req.body[fieldName];
+
+    if (field) {
+      req.body[fieldName] = xss(field);
     }
 
-    if (userTaken) {
-      err.msgList.push('Notendanafn er ekki laust.');
-      err.username = true;
-    }
+    next();
+  };
+}
 
-    if (emailTaken) {
-      err.msgList.push('Netfang er ekki laust.');
-      err.email = true;
-    }
+// Fylki af öllum hreinsunum fyrir umsókn
+const sanitazions = [
+  sanitize('name').trim().escape(),
+  sanitizeXss('name'),
 
-    return err;
+  sanitizeXss('email'),
+  sanitize('email').trim().normalizeEmail(),
+
+  sanitize('username').trim().escape(),
+  sanitizeXss('username'),
+
+];
+
+function register(req, res) {
+  const data = {
+    title: 'Register',
+    name: '',
+    email: '',
+    username: '',
+    password: '',
+    password2: '',
+    errors: [],
+  };
+  res.render('register', data);
+}
+
+async function registerPost(req, res) {
+  const {
+    body: {
+      name = '',
+      email = '',
+      username = '',
+      password = '',
+      password2 = '',
+    } = {},
+  } = req;
+
+  const data = {
+    name,
+    email,
+    username,
+    password,
+    password2,
+  };
+
+  hashPassword(data);
+  return res.redirect('/thanks');
+}
+
+function showErrors(req, res, next) {
+  const {
+    body: {
+      name = '',
+      email = '',
+      username = '',
+      password = '',
+      password2 = '',
+    } = {},
+  } = req;
+
+  const data = {
+    name,
+    email,
+    username,
+    password,
+    password2,
+
+  };
+
+  const validation = validationResult(req);
+
+  if (!validation.isEmpty()) {
+    const errors = validation.array();
+    data.errors = errors;
+    data.title = 'Nýskráning – vandræði';
+
+    return res.render('register', data);
   }
 
-  return undefined;
+  return next();
 }
+
+function thanks(req, res) {
+  return res.render('thanks', { title: 'Nýskráning tókst!' });
+}
+
+router.get('/', register);
+router.get('/thanks', thanks);
+
+router.post(
+  '/',
+  // Athugar hvort form sé í lagi
+  validations,
+  // Ef form er ekki í lagi, birtir upplýsingar um það
+  showErrors,
+  // Öll gögn í lagi, hreinsa þau
+  sanitazions,
+  // Senda gögn í gagnagrunn
+  catchErrors(registerPost),
+);
 
 module.exports = router;
