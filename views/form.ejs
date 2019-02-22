@@ -1,5 +1,23 @@
 <%- include('header') -%>
 
+<% if (isLoggedIn) { %>
+  <div class="header">
+    <p class="selected"> <a href="/">Atvinnuumsókn</a></p>
+    <p> <a href="./applications">Umsóknir</a></p>
+    <p> <a href="./admin">Notendur</a></p>
+    <div class="logout">
+      <p><%= displayName %></p>
+      <a href="/logout">Útskrá</a>
+    </div>
+  </div>
+  <% } else { %>
+    <div class="header">
+      <p class="selected"> <a href="/">Atvinnuumsókn</a></p>
+      <p> <a href="./login">Innskrá</a></p>
+      <p> <a href="./register">Nýskrá</a></p>
+    </div>
+  <% } %>
+
 <h1>Atvinnuumsókn</h1>
 
 <form method="post" action="/">
