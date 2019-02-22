@@ -29,6 +29,17 @@ VALUES
   return query(q, values);
 }
 
+async function registerUser(data) {
+  const q = `
+  INSERT INTO users
+  (username, password, name, email)
+  VALUES
+  ($1, $2, $3, $4)`;
+  const values = [data.username, data.password, data.name, data.email];
+
+  return query(q, values);
+}
+
 async function select() {
   const result = await query('SELECT * FROM applications ORDER BY id');
 
@@ -50,17 +61,18 @@ async function deleteRow(id) {
   return query(q, id);
 }
 
-async function findByUsername(username) {
-  const q = 'SELECT * FROM users WHERE username = $1';
+async function selectUser() {
+  const result = await query('SELECT * FROM users ORDER BY id');
 
-  return query(q, username);
+  return result.rows;
 }
 
 module.exports = {
-  query,
   insert,
   select,
   update,
   deleteRow, // delete er frátekið orð
-  findByUsername, // skila fallinu svo hægt sé að nota það
+  registerUser,
+  selectUser,
+  query,
 };
