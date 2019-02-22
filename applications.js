@@ -1,8 +1,10 @@
 const express = require('express');
-const xss = require('xss');
 
-
-const { select, update, deleteRow } = require('./db');
+const {
+  select,
+  update,
+  deleteRow,
+} = require('./db');
 
 const router = express.Router();
 
@@ -25,10 +27,17 @@ function catchErrors(fn) {
  */
 async function applications(req, res) {
   const list = await select();
+  // athuga hvort user sé innskráður
+  const isLoggedIn = req.isAuthenticated();
+
+  let displayName = '';
+  if (isLoggedIn) displayName = req.user.name;
 
   const data = {
     title: 'Umsóknir',
     list,
+    isLoggedIn,
+    displayName,
   };
 
   return res.render('applications', data);
