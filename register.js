@@ -1,8 +1,8 @@
 
 const express = require('express');
 const xss = require('xss');
-const { 
-  check, 
+const {
+  check,
   validationResult,
 } = require('express-validator/check');
 const { sanitize } = require('express-validator/filter');

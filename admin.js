@@ -20,7 +20,7 @@ async function getAdmin(req, res) {
   const isLoggedIn = req.isAuthenticated();
   let showName = '';
   if (isLoggedIn) {
-    showName = req.user.name; 
+    showName = req.user.name;
   }
 
   return res.render('admin', {

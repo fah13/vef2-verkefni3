@@ -10,7 +10,7 @@ const apply = require('./apply');
 const register = require('./register');
 const admin = require('./admin');
 const applications = require('./applications');
-const users = require('./users')
+const users = require('./users');
 
 // const sessionSecret = process.env.SESSION_SECRET;
 
@@ -107,7 +107,7 @@ app.route('/login')
         req.session.messages = [];
       }
       const data = {
-        title: 'Villa', 
+        title: 'Villa',
         errors: [],
         msg,
       };

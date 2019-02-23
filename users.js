@@ -1,10 +1,10 @@
 
 /* todo útfæra virkni fyrir notendur */
+const bcrypt = require('bcrypt');
 const {
   registerUser,
   selectUser,
 } = require('./db');
-const bcrypt = require('bcrypt');
 
 async function comparePasswords(password, user) {
   const ok = await bcrypt.compare(password, user.password);
