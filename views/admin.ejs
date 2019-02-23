@@ -1,9 +1,9 @@
 <%- include('header') -%>
 
 <div class="header">
-  <p> <a href="/">Atvinnuumsókn</a></p>
-  <p> <a href="./login">Innskrá</a></p>
-  <p> <a href="./register">Nýskrá</a></p>
+  <p class="header__item"> <a  href="/">Atvinnuumsókn</a></p>
+  <p class="header__item"> <a href="./login">Innskrá</a></p>
+  <p class="header__item"> <a href="./register">Nýskrá</a></p>
 </div>
 
 <h1>Notendur</h1>
@@ -13,16 +13,16 @@
     <p>Engir notendur</p>
   <% } %>
 
-  <div class="Users">
-    <div class="userInfo">
-      <p>Stjórnandi?</p>
-      <p>Notendanafn</p>
-      <p>Nafn</p>
-      <p>Netfang</p>
+  <div class="users__table">
+    <div class="users__title">
+      <p class="users__title__item">Stjórnandi?</p>
+      <p class="users__title__item">Notendanafn</p>
+      <p class="users__title__item">Nafn</p>
+      <p class="users__title__item">Netfang</p>
     </div>
         
     <% userList.forEach((user) => { %>
-      <div class="notandi">
+      <div class="users__content">
         <p><%= user.username %></p>
         <p><%= user.name %></p>
         <p><%= user.email %></p>

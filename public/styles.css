@@ -161,3 +161,17 @@ button:hover {
   font-weight: bold;
   text-decoration-line: underline; 
 }
+
+.users__title {
+  margin: 10px;
+  font-weight: 700;
+}
+
+.users__title__item {
+  padding: 0 10px;
+}
+
+.users__content {
+  display: flex;
+  padding: 10px;
+}
