@@ -18,16 +18,16 @@ function ensureLoggedIn(req, res, next) {
 async function getAdmin(req, res) {
   const getUsers = await selectUser();
   const isLoggedIn = req.isAuthenticated();
-  let displayName = '';
+  let showName = '';
   if (isLoggedIn) {
-    displayName = req.user.name; 
+    showName = req.user.name; 
   }
 
   return res.render('admin', {
     title: 'admin',
     getUsers,
     isLoggedIn,
-    displayName,
+    showName,
   });
 }
 

@@ -94,6 +94,12 @@ const sanitazions = [
  * @returns {string} Formi fyrir umsókn
  */
 function form(req, res) {
+  const isLoggedIn = req.isAuthenticated();
+  let showName = '';
+  if (isLoggedIn) {
+    showName = req.user.name;
+  }
+
   const data = {
     title: 'Atvinnuumsókn',
     name: '',
@@ -102,7 +108,8 @@ function form(req, res) {
     text: '',
     job: '',
     errors: [],
-    page: 'apply',
+    showName,
+    isLoggedIn,
   };
   res.render('form', data);
 }

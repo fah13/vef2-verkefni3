@@ -1,0 +1,34 @@
+<%- include('header') -%>
+
+<div class="header">
+  <p> <a href="/">Atvinnuumsókn</a></p>
+  <p> <a href="./login">Innskrá</a></p>
+  <p> <a href="./register">Nýskrá</a></p>
+</div>
+
+<h1>Notendur</h1>
+
+<div class="users">
+  <% if (userList.length === 0) { %>
+    <p>Engir notendur</p>
+  <% } %>
+
+  <div class="Users">
+    <div class="userInfo">
+      <p>Stjórnandi?</p>
+      <p>Notendanafn</p>
+      <p>Nafn</p>
+      <p>Netfang</p>
+    </div>
+        
+    <% userList.forEach((user) => { %>
+      <div class="notandi">
+        <p><%= user.username %></p>
+        <p><%= user.name %></p>
+        <p><%= user.email %></p>
+      </div>
+      <% }); %>
+  </div>
+</div>
+
+<%- include('footer') -%>
